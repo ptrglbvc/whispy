@@ -20,11 +20,11 @@ Install it with pip in editable mode. If anyone knows how to make it work in reg
 pip install -e .
 ```
 Add your API key in your environment variables in the .zshrc or .bashrc file.
-```
+```bash
 export OPENAI_API_KEY = "(your key)"
 ```
 In Windows, you just have to execute the following command in PowerShell.
-```
+```powershell
 $env:OPENAI_API_KEY = '(your key)' 
 ```
 
