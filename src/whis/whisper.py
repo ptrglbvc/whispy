@@ -1,6 +1,6 @@
 import pyaudio
 import wave
-import openai
+from openai import OpenAI
 
 import sys
 from pathlib import Path
@@ -11,6 +11,8 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1 if sys.platform == 'darwin' else 2
 RATE = 44100
 RECORD_SECONDS = 5
+
+client = OpenAI()
 
 def main():
 
@@ -59,12 +61,15 @@ def whisper(file, prompt=""):
     if not getenv("OPENAI_API_KEY"):
         print("No environment variable found")
         exit()
-    openai.api_key = getenv("OPENAI_API_KEY")
-    audio_file = open(file, "rb")
-    transcript = openai.Audio.transcribe(
-            model = "whisper-1",
-            file = audio_file,
-            prompt = prompt)["text"]
+    client.api_key = getenv("OPENAI_API_KEY")
+    with open(file, "rb") as audio_file:
+        try:
+            transcript = client.audio.transcriptions.create(
+                    model = "whisper-1",
+                    file = audio_file,
+                    prompt = prompt).text
+        except:
+            transcript = "Oops, that didn't work"
     return transcript
 
 if (__name__)=="__main__":
